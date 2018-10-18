@@ -125,4 +125,4 @@ When the delete button is pressed, delete the corresponding item from the list.
 6. Add items 'Android', 'IPhone' and 'Windows Phone' to list when corresponding button is clicked 7.5pts
 7. delete line item (order) when delete button is click 7.5 pts
 8. read in the orders.json file and populate the list table with the initial orders (3) 7.5pts
-9. Display calculated results on a flex-modal (see screenshot) 2.5 pts
+9. Display calculated results on a flex-modal (see screenshot) 2.5 pts# IS51Test1
