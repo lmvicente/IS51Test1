@@ -22,6 +22,9 @@ export interface IOrder {
 export class OrdersComponent implements OnInit {
 
   orders: Array<IOrder> = [];
+  errorMessage = '';
+  confirmMessage = '';
+  name = '';
 
   constructor(
     private router: Router,
@@ -34,11 +37,60 @@ export class OrdersComponent implements OnInit {
 
   }
 
+  // Validation Step
+  validate(name: string, total: number, taxAmount: number, subTotal: number) {
+    this.errorMessage = '';
+    if (!total) {
+      this.errorMessage = 'Total must execute calculation!';
+    }
+
+    if (name === '') {
+      this.errorMessage = 'Name must not be empty!';
+    } else if (name.indexOf(',') === -1) {
+      this.errorMessage = 'Name must have a comma and a space!';
+    }
+
+    if (this.errorMessage.length > 0) {
+
+      return false;
+
+    } else {
+      this.flexModal.openDialog('confirm-modal');
+      return true;
+
+    }
+  }
+
+  showMessage(modalID: string) {
+    this.flexModal.openDialog('error-modal');
+  }
+
+  // Success
+  setSuccessMessage(name: string, total: number, taxAmount: number, subTotal: number) {
+  }
+
+  // Calculate Total use acc q*p
+  calcTotal() {
+    const total = this.orders.reduce((acc: number, item: IOrder) => {
+      acc += item.quantity * item.price;
+      return acc;
+    }, 0);
+    const taxAmount = total * 0.1;
+    const subTotal = total - taxAmount;
+    const validation = this.validate(this.name, total, taxAmount, subTotal);
+    if (!validation) {
+      this.showMessage('error-modal'); 
+    } else {
+
+      this.showMessage('confirm-modal');
+    }
+  }
+
   // Add Orders
-  addItem(item: string) {
+  addOrder(item: string) {
     switch (item) {
       case 'Android':
-        this.orders.unshift({
+        this.orders.push({
           'pid': '1',
           'image': 'assets/sm_android.jpeg',
           'description': 'Android',
@@ -47,7 +99,7 @@ export class OrdersComponent implements OnInit {
         });
         break;
       case 'IPhone':
-        this.orders.unshift({
+        this.orders.push({
           'pid': '2',
           'image': 'assets/sm_iphone.jpeg',
           'description': 'IPhone',
@@ -56,7 +108,7 @@ export class OrdersComponent implements OnInit {
         });
         break;
       case 'Windows':
-        this.orders.unshift({
+        this.orders.push({
           'pid': '3',
           'image': 'assets/sm_windows.jpeg',
           'description': 'Windows Phone',
@@ -90,27 +142,17 @@ export class OrdersComponent implements OnInit {
 
   }
 
-  // Clear Orders
+  // Clear Orders using keys / map
   clearOrders() {
-    this.orders.map((item: IOrder, i: number) => {
-      Object.keys(item).map((key: string) => {
-        if (key !== 'image') {
-          item[key] = '';
-        }
-        return item;
-      });
-    });
+    this.orders = [];
   }
 
   // Submit button “Thank you . Here is your order details!”.
   submitOrder() {
 
   }
-  // Validation button
-  validateOrder() {
 
-  }
-
+// Delete Order use splice
   deleteOrder(index: number) {
     console.log(index);
     this.orders.splice(index, 1);

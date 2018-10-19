@@ -6,9 +6,9 @@
     </div>
     <mat-toolbar class="action-bar" color="accent">
       <div class="align-right">
-        <button mat-raised-button (click)=addItem(Android)>Add Android</button>
-        <button mat-raised-button (click)=addItem(IPhone)>Add IPhone</button>
-        <button mat-raised-button (click)=addItem(Windows)>Add Windows Phone</button>
+        <button mat-raised-button (click)="addOrder('Android')">Add Android</button>
+        <button mat-raised-button (click)="addOrder('IPhone')">Add IPhone</button>
+        <button mat-raised-button (click)="addOrder('Windows')">Add Windows Phone</button>
       </div>
     </mat-toolbar>
     <div class="table-grid">
@@ -29,11 +29,13 @@
         <tbody>
           <tr *ngFor="let order of orders; let i = index">
             <td><img class="item-image" [src]="order.image" alt="img"></td>
-            <td><input type="text" [(ngModel)] = "order.pid" class="form-control" placeholder="PID"></td>
-            <td><input type="text" [(ngModel)] = "order.description"class="form-control" placeholder="Description"></td>
-            <td><input type="text" [(ngModel)] = "order.price"class="form-control" placeholder="Price"></td>
-            <td><input type="text" [(ngModel)] = "order.quantity"class="form-control" placeholder="Quantity"></td>
-            <td><button mat-raised-button color="primary" (click) = deleteOrder() color="accent"><mat-icon>delete</mat-icon></button></td>
+            <td><input type="text" [(ngModel)]="order.pid" class="form-control" placeholder="PID"></td>
+            <td><input type="text" [(ngModel)]="order.description" class="form-control" placeholder="Description"></td>
+            <td><input type="text" [(ngModel)]="order.price" class="form-control" placeholder="Price"></td>
+            <td><input type="text" [(ngModel)]="order.quantity" class="form-control" placeholder="Quantity"></td>
+            <td><button mat-raised-button color="primary" (click)=deleteOrder(i) color="accent">
+                <mat-icon>delete</mat-icon>
+              </button></td>
           </tr>
         </tbody>
       </table>
@@ -41,41 +43,29 @@
     <div class="action-container">
       <button mat-raised-button color="primary" (click)=displayOrder()>Load Saved Items</button>
       <button mat-raised-button color="primary" (click)=clearOrders()>Clear</button>
-      <button mat-raised-button color="primary">Submit</button>
+      <button mat-raised-button color="primary" (click)=calcTotal()>Submit</button>
     </div>
   </mat-card>
 </div>
 <!-- the error modal -->
-<app-flex-modal #flex1
-  [transition]="'slide-in-right'"  
-  [modalStyle]="{'border':'5px solid #CCC'}"
-  [showToolbar]="true" 
-  [showDefaultAction]="false" 
-  [modalID]="'error-modal'" 
-  [width]="'615px'"
-  [height]="'auto'">
+<app-flex-modal #flex1 [transition]="'slide-in-right'" [modalStyle]="{'border':'5px solid #CCC'}" [showToolbar]="true"
+  [showDefaultAction]="false" [modalID]="'error-modal'" [width]="'615px'" [height]="'auto'">
   <span class="modal-title">Warning</span>
   <div class="modal-content">
     <h3>{{errorMessage}}</h3>
   </div>
   <div class="modal-action">
-      <button mat-raised-button color="primary" (click)="flex1.modal.cancel()">Close</button>
+    <button mat-raised-button color="primary" (click)="flex1.modal.cancel()">Close</button>
   </div>
 </app-flex-modal>
 <!-- the order success modal -->
-<app-flex-modal #flex2
-  [transition]="'slide-in-right'"  
-  [modalStyle]="{'border':'5px solid #CCC'}"
-  [showToolbar]="true" 
-  [showDefaultAction]="false" 
-  [modalID]="'confirm-modal'" 
-  [width]="'615px'"
-  [height]="'auto'">
+<app-flex-modal #flex2 [transition]="'slide-in-right'" [modalStyle]="{'border':'5px solid #CCC'}" [showToolbar]="true"
+  [showDefaultAction]="false" [modalID]="'confirm-modal'" [width]="'615px'" [height]="'auto'">
   <span class="modal-title">Order Confirmation</span>
   <div class="modal-content">
     <h3>{{confirmMessage}}</h3>
   </div>
   <div class="modal-action">
-      <button mat-raised-button color="primary" (click)="flex2.modal.cancel()">Close</button>
+    <button mat-raised-button color="primary" (click)="flex2.modal.cancel()">Close</button>
   </div>
 </app-flex-modal>
